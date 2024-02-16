@@ -9,3 +9,30 @@
     @apply bg-off-white min-h-screen font-body text-primary;
   }
 }
+
+@layer components {
+  .header-link {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.3rem;
+      left: 0;
+      right: 0;
+      height: 0.3rem;
+      transform-origin: right;
+      background-color: currentColor;
+      transition: transform 0.95s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    &:not(.active) {
+      &::after {
+        transform: scaleX(0);
+      }
+    }
+
+    &:hover::after {
+      transform-origin: left;
+      transform: scaleX(1);
+    }
+  }
+}

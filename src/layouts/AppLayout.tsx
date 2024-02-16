@@ -1,12 +1,14 @@
 import { Outlet, ScrollRestoration } from 'react-router-dom';
-import { Header } from '../components/Header';
+import { Header } from '../components/Header/Header';
 
 export const AppLayout = () => {
   return (
     <>
       <ScrollRestoration />
       <Header />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };
