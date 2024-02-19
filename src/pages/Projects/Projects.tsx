@@ -1,37 +1,38 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { RadioButton } from '../../components/RadioButton';
 import { cn } from '../../lib/tailwind';
 import { projects, tags } from './Projects.constants';
 import { TagsTypeButton } from './TagFilters/TagsTypeButton';
 
 export const Projects = () => {
-  const [selectedTagsType, setSelectedTagsType] = useState<string>('category');
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [displayedProjects, setDisplayedProjects] = useState(projects);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedTagsType = searchParams.get('type') ?? 'category';
+  const selectedTag = searchParams.get('tag');
+
+  const displayedProjects = useMemo(
+    () =>
+      selectedTag ?
+        projects.filter(({ tags }) =>
+          tags.find(({ value }) => value === selectedTag),
+        )
+      : projects,
+    [selectedTag],
+  );
 
   const handleTagsTypeChange = (value: string) => {
-    setSelectedTagsType(value);
+    setSearchParams((searchParams) => {
+      searchParams.set('type', value);
+      return searchParams;
+    });
   };
 
   const handleTagChange = (value: string) => {
-    setSelectedTag(value);
+    setSearchParams((searchParams) => {
+      searchParams.set('tag', value);
+      return searchParams;
+    });
   };
-
-  const handleResetFilters = () => {
-    setSelectedTag(null);
-  };
-
-  useEffect(() => {
-    const displayedProjects =
-      selectedTag ?
-        projects.filter((project) =>
-          project.tags.find((tag) => tag.value === selectedTag),
-        )
-      : projects;
-
-    setDisplayedProjects(displayedProjects);
-  }, [selectedTag]);
 
   return (
     <div className="flex flex-col gap-12 px-8 py-12">
@@ -54,12 +55,9 @@ export const Projects = () => {
           consectetur alias ipsam repellendus temporibus.
         </p>
         <div className="flex flex-wrap gap-2">
-          <button
-            onClick={handleResetFilters}
-            className="button hover:bg-secondary-light"
-          >
+          <Link to="." className="button hover:bg-secondary-light">
             All projects
-          </button>
+          </Link>
           <fieldset className="flex flex-wrap gap-2">
             <legend className="sr-only">Select the tags type:</legend>
             {tags.map(({ type: { value, label } }) => (
@@ -86,7 +84,7 @@ export const Projects = () => {
                     value={value}
                     isChecked={isSelected}
                     className={cn(
-                      'hover:bg-tertiary-light border-secondary  text-secondary',
+                      'border-secondary text-secondary  hover:bg-tertiary-light',
                       isSelected && 'bg-tertiary-light',
                     )}
                     handleChange={handleTagChange}
