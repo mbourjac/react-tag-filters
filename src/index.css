@@ -6,11 +6,15 @@
 
 @layer base {
   body {
-    @apply bg-off-white min-h-screen font-body text-primary;
+    @apply min-h-screen bg-off-white font-body text-body;
   }
 }
 
 @layer components {
+  .button {
+    @apply rounded-full px-4 py-1 font-medium duration-300 ease-in-out [transition-property:all];
+  }
+
   .header-link {
     &::after {
       content: '';
@@ -34,5 +38,10 @@
       transform-origin: left;
       transform: scaleX(1);
     }
+  }
+
+  .search-input {
+    background: transparent url('./assets/icons/search.svg') no-repeat 1rem
+      center / 1.25rem;
   }
 }

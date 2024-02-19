@@ -14,9 +14,18 @@ export default {
           DEFAULT: '#0641c0',
           light: '#0641c033',
         },
-        primary: '#0641c0',
-        secondary: '#ffc9a7',
-        tertiary: '#86adf3',
+        primary: {
+          DEFAULT: '#043294',
+          light: '#E6EBF4',
+        },
+        secondary: {
+          DEFAULT: '#1254E2',
+          light: '#E7EEFC',
+        },
+        tertiary: {
+          DEFAULT: '#3A6EDE',
+          light: '#EBF1FC',
+        },
       },
     },
   },
