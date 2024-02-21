@@ -10,7 +10,9 @@ export const Header = () => {
         <span className="sr-only">Home</span>
       </Link>
       <nav className="flex gap-16 font-medium">
-        <HeaderLink to={'projects'}>Projects</HeaderLink>
+        <HeaderLink to={'projects'} end>
+          Projects
+        </HeaderLink>
         <HeaderLink to={'about'}>About</HeaderLink>
         <HeaderLink to={'blog'}>Blog</HeaderLink>
       </nav>
