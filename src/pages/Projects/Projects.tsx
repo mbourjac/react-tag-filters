@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { MainHeading } from '../../components/MainHeading';
 import { projects } from './Projects.constants';
 import { ProjectSearch } from './ProjectsFilters/ProjectSearch';
 import { TagFilters } from './ProjectsFilters/TagFilters';
@@ -36,9 +37,9 @@ export const Projects = () => {
 
   return (
     <div className="flex flex-col gap-12 px-8 py-12">
-      <h1 className="text-4xl font-medium">
+      <MainHeading>
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
-      </h1>
+      </MainHeading>
       <div className="flex flex-col gap-6">
         <ProjectSearch />
         <p>
