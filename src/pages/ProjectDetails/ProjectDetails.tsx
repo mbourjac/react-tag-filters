@@ -1,20 +1,63 @@
+import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ProjectCard } from '../../components/ProjectCard';
+import { shuffleArray } from '../../helpers/arrays';
 import { NotFound } from '../NotFound';
 import { projects } from '../Projects/Projects.constants';
+import type { Project } from './ProjectDetails.types';
 
 export const ProjectDetails = () => {
   const { slug } = useParams();
   const project = projects.find((project) => project.slug === slug);
+
+  const getRandomAsideProjects = useCallback(({ slug, tags }: Project) => {
+    const asideProjectsMap = new Map<string, Project>();
+
+    tags.forEach(({ type, value }) => {
+      const matchingProjects = projects.filter(
+        (project) =>
+          project.slug !== slug &&
+          project.tags.some((tag) => tag.type === type && tag.value === value),
+      );
+
+      if (matchingProjects.length > 0) {
+        const shuffledProjects = shuffleArray(matchingProjects);
+
+        for (let i = 0; i < shuffledProjects.length - 1; i++) {
+          const randomAsideProject = shuffledProjects[i]!;
+
+          if (!asideProjectsMap.has(randomAsideProject.slug)) {
+            asideProjectsMap.set(randomAsideProject.slug, randomAsideProject);
+            break;
+          }
+        }
+      }
+    });
+
+    return Array.from(asideProjectsMap.values());
+  }, []);
 
   if (!project) {
     return <NotFound />;
   }
 
   const { title, tags } = project;
+  const asideProjects = getRandomAsideProjects(project);
 
   return (
     <>
-      <div className="flex flex-col gap-[2px] p-[2px] text-off-white">
+      <aside
+        key={slug}
+        className="fixed right-0 top-[4.625rem] flex h-[calc(100vh-4.625rem)] w-[30vw] flex-col gap-8 overflow-y-auto px-8 py-12"
+      >
+        <p className="text-xl">
+          Id eligendi mollitia magni eveniet numquam minima quisquam
+        </p>
+        {asideProjects.map((project) => (
+          <ProjectCard key={project.slug} {...project} />
+        ))}
+      </aside>
+      <div className="flex w-[70vw] flex-col gap-[2px] p-[2px] text-off-white">
         <div className="flex flex-col gap-8 rounded-[48px] bg-body px-8 py-12">
           <div className="aspect-video w-full bg-off-white"></div>
           <div className="flex flex-col gap-8">
