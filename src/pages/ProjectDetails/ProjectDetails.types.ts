@@ -1,5 +1,10 @@
+export interface TagType {
+  value: string;
+  label: string;
+}
+
 export interface ProjectTag {
-  type: string;
+  type: TagType['value'];
   value: string;
   label: string;
 }

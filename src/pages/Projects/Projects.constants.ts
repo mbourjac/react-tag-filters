@@ -1,3 +1,9 @@
+export const tagTypes = [
+  { value: 'category', label: 'Category' },
+  { value: 'client', label: 'Client' },
+  { value: 'field', label: 'Field' },
+];
+
 export const projects = [
   {
     title: 'Sit Consectetur Cupiditate Repellat',
@@ -507,30 +513,4 @@ export const projects = [
       { type: 'field', value: 'nobis', label: 'Nobis' },
     ],
   },
-];
-
-export const categoryMap = new Map<string, string>();
-export const clientMap = new Map<string, string>();
-export const fieldMap = new Map<string, string>();
-
-for (const project of projects) {
-  for (const tag of project.tags) {
-    const { type, value, label } = tag;
-    if (type === 'category') {
-      categoryMap.set(value, label);
-    } else if (type === 'client') {
-      clientMap.set(value, label);
-    } else if (type === 'field') {
-      fieldMap.set(value, label);
-    }
-  }
-}
-
-export const tags = [
-  {
-    type: { value: 'category', label: 'Category' },
-    items: Array.from(categoryMap),
-  },
-  { type: { value: 'client', label: 'Client' }, items: Array.from(clientMap) },
-  { type: { value: 'field', label: 'Field' }, items: Array.from(fieldMap) },
 ];

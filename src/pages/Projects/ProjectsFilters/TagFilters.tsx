@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { RadioButton } from '../../../components/RadioButton';
+import { useProjectsTags } from '../../../hooks/use-projects-tags';
 import { cn } from '../../../lib/tailwind';
-import { tags } from '../Projects.constants';
+import { projects, tagTypes } from '../Projects.constants';
 import { TagsTypeButton } from './TagsTypeButton';
 
 type TagFiltersProps = {
@@ -17,6 +18,9 @@ export const TagFilters = ({
   handleTagsTypeChange,
   handleTagChange,
 }: TagFiltersProps) => {
+  const { getAllUniqueTags } = useProjectsTags();
+  const tags = getAllUniqueTags(tagTypes, projects);
+
   return (
     <div className="flex flex-wrap gap-2">
       <Link to="." className="button hover:bg-secondary-light">
@@ -38,7 +42,7 @@ export const TagFilters = ({
       {tags.map(({ type, items }) => {
         return (
           selectedTagsType === type.value &&
-          items.map(([value, label]) => {
+          items.map(({ value, label }) => {
             const isSelected = selectedTag === value;
 
             return (
