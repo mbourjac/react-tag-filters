@@ -10,58 +10,63 @@ export const ProjectDetails = () => {
   const { slug } = useParams();
   const project = projects.find((project) => project.slug === slug);
 
-  const getRandomAsideProjects = useCallback(({ slug, tags }: Project) => {
-    const asideProjectsMap = new Map<string, Project>();
+  const getRandomRecommendationProjects = useCallback(
+    ({ slug, tags }: Project) => {
+      const asideProjectsMap = new Map<string, Project>();
 
-    tags.forEach(({ type, value }) => {
-      const matchingProjects = projects.filter(
-        (project) =>
-          project.slug !== slug &&
-          project.tags.some((tag) => tag.type === type && tag.value === value),
-      );
+      tags.forEach(({ type, value }) => {
+        const matchingProjects = projects.filter(
+          (project) =>
+            project.slug !== slug &&
+            project.tags.some(
+              (tag) => tag.type === type && tag.value === value,
+            ),
+        );
 
-      if (matchingProjects.length > 0) {
-        const shuffledProjects = shuffleArray(matchingProjects);
+        if (matchingProjects.length > 0) {
+          const shuffledProjects = shuffleArray(matchingProjects);
 
-        for (let i = 0; i < shuffledProjects.length - 1; i++) {
-          const randomAsideProject = shuffledProjects[i]!;
+          for (let i = 0; i < shuffledProjects.length - 1; i++) {
+            const randomAsideProject = shuffledProjects[i]!;
 
-          if (!asideProjectsMap.has(randomAsideProject.slug)) {
-            asideProjectsMap.set(randomAsideProject.slug, randomAsideProject);
-            break;
+            if (!asideProjectsMap.has(randomAsideProject.slug)) {
+              asideProjectsMap.set(randomAsideProject.slug, randomAsideProject);
+              break;
+            }
           }
         }
-      }
-    });
+      });
 
-    return Array.from(asideProjectsMap.values());
-  }, []);
+      return Array.from(asideProjectsMap.values());
+    },
+    [],
+  );
 
   if (!project) {
     return <NotFound />;
   }
 
   const { title, tags } = project;
-  const asideProjects = getRandomAsideProjects(project);
+  const recommendationProjects = getRandomRecommendationProjects(project);
 
   return (
     <>
       <aside
-        key={slug}
-        className="fixed right-0 top-[4.625rem] flex h-[calc(100vh-4.625rem)] w-[30vw] flex-col gap-8 overflow-y-auto px-8 py-12"
+        key={`desktop-recommendations-${slug}`}
+        className="fixed right-0 top-[4.625rem] hidden h-[calc(100vh-4.625rem)] w-[30vw] flex-col gap-8 overflow-y-auto px-8 py-12 lg:flex"
       >
         <p className="text-xl">
           Id eligendi mollitia magni eveniet numquam minima quisquam
         </p>
-        {asideProjects.map((project) => (
+        {recommendationProjects.map((project) => (
           <ProjectCard key={project.slug} {...project} />
         ))}
       </aside>
-      <div className="flex w-[70vw] flex-col gap-[2px] p-[2px] text-off-white">
-        <div className="flex flex-col gap-8 rounded-[48px] bg-body px-8 py-12">
+      <div className="flex flex-col gap-[2px] p-[2px] text-off-white lg:w-[70vw]">
+        <div className="flex flex-col gap-8 rounded-[48px] bg-body px-4 py-12 sm:px-8">
           <div className="aspect-video w-full bg-off-white"></div>
           <div className="flex flex-col gap-8">
-            <ul className="flex gap-4 text-2xl">
+            <ul className="flex flex-wrap gap-4 text-2xl">
               {tags.map(({ type, value, label }) => (
                 <li key={value}>
                   <Link
@@ -77,7 +82,24 @@ export const ProjectDetails = () => {
             <h1 className="text-4xl font-medium">{title}</h1>
           </div>
         </div>
-        <div className="flex flex-col gap-12 rounded-[48px] bg-body px-8 py-12 text-2xl">
+        <div
+          key={`mobile-recommendations-${slug}`}
+          className="max-w-screen flex flex-col gap-8 overflow-x-auto px-4 py-8 text-primary sm:px-8 lg:hidden"
+        >
+          <p className="text-xl">
+            Id eligendi mollitia magni eveniet numquam minima quisquam
+          </p>
+          <div className="flex gap-8">
+            {recommendationProjects.map((project) => (
+              <ProjectCard
+                key={project.slug}
+                {...project}
+                coverClassName="h-[20vh] w-auto"
+              />
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-12 rounded-[48px] bg-body px-4 py-12 text-2xl sm:px-8">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
             quibusdam neque, ducimus non consequuntur necessitatibus. Omnis
