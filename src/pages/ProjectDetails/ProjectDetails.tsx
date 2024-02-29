@@ -1,53 +1,19 @@
-import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ProjectCard } from '../../components/ProjectCard';
-import { shuffleArray } from '../../helpers/arrays';
+import { useRecommendationProjects } from '../../hooks/use-recommendation-projects';
 import { NotFound } from '../NotFound';
 import { projects } from '../Projects/Projects.constants';
-import type { Project } from './ProjectDetails.types';
 
 export const ProjectDetails = () => {
   const { slug } = useParams();
   const project = projects.find((project) => project.slug === slug);
-
-  const getRandomRecommendationProjects = useCallback(
-    ({ slug, tags }: Project) => {
-      const asideProjectsMap = new Map<string, Project>();
-
-      tags.forEach(({ type, value }) => {
-        const matchingProjects = projects.filter(
-          (project) =>
-            project.slug !== slug &&
-            project.tags.some(
-              (tag) => tag.type === type && tag.value === value,
-            ),
-        );
-
-        if (matchingProjects.length > 0) {
-          const shuffledProjects = shuffleArray(matchingProjects);
-
-          for (let i = 0; i < shuffledProjects.length - 1; i++) {
-            const randomAsideProject = shuffledProjects[i]!;
-
-            if (!asideProjectsMap.has(randomAsideProject.slug)) {
-              asideProjectsMap.set(randomAsideProject.slug, randomAsideProject);
-              break;
-            }
-          }
-        }
-      });
-
-      return Array.from(asideProjectsMap.values());
-    },
-    [],
-  );
+  const recommendationProjects = useRecommendationProjects(project);
 
   if (!project) {
     return <NotFound />;
   }
 
   const { title, tags } = project;
-  const recommendationProjects = getRandomRecommendationProjects(project);
 
   return (
     <>
@@ -58,7 +24,7 @@ export const ProjectDetails = () => {
         <p className="text-xl">
           Id eligendi mollitia magni eveniet numquam minima quisquam
         </p>
-        {recommendationProjects.map((project) => (
+        {recommendationProjects?.map((project) => (
           <ProjectCard key={project.slug} {...project} />
         ))}
       </aside>
@@ -90,7 +56,7 @@ export const ProjectDetails = () => {
             Id eligendi mollitia magni eveniet numquam minima quisquam
           </p>
           <div className="flex gap-8">
-            {recommendationProjects.map((project) => (
+            {recommendationProjects?.map((project) => (
               <ProjectCard
                 key={project.slug}
                 {...project}
