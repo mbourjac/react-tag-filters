@@ -3,7 +3,7 @@ import type { Project } from '../pages/ProjectDetails/ProjectDetails.types';
 import { projects } from '../pages/Projects/Projects.constants';
 
 export const useRecommendationProjects = (project?: Project) => {
-  if (!project) return;
+  if (!project) return [];
 
   const { slug, tags } = project;
   const asideProjectsMap = new Map<string, Project>();
