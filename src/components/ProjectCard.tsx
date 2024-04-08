@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import { cn } from '../lib/tailwind';
 import type { Project } from '../pages/ProjectDetails/ProjectDetails.types';
 
@@ -14,7 +14,12 @@ export const ProjectCard = ({
 }: ProjectCardProps) => {
   return (
     <article key={slug} className="flex flex-col gap-2">
-      <Link to={`/projects/${slug}`}>
+      <Link
+        to={`/projects/$projectSlug`}
+        params={{
+          projectSlug: slug,
+        }}
+      >
         <div
           className={cn('aspect-video w-full bg-body', coverClassName)}
         ></div>

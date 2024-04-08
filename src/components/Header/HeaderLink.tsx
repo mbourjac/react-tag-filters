@@ -1,22 +1,21 @@
 import type { ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 
 type HeaderLinkProps = {
   to: string;
   children: ReactNode;
-  end?: boolean;
 };
 
-export const HeaderLink = ({ to, end, children }: HeaderLinkProps) => {
+export const HeaderLink = ({ to, children }: HeaderLinkProps) => {
   return (
-    <NavLink
+    <Link
       to={to}
-      end={end}
-      className={({ isActive }) =>
-        `header-link relative ${isActive ? 'active' : ''}`
-      }
+      className="header-link relative"
+      activeProps={{
+        className: 'active',
+      }}
     >
       {children}
-    </NavLink>
+    </Link>
   );
 };

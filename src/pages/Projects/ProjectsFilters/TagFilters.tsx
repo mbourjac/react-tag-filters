@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { RadioButton } from '../../../components/RadioButton';
 import { useProjectsTags } from '../../../hooks/use-projects-tags';
 import { cn } from '../../../lib/tailwind';
@@ -7,19 +7,25 @@ import { TagsTypeButton } from './TagsTypeButton';
 
 type TagFiltersProps = {
   selectedTagsType: string;
-  selectedTag: string | null;
-  handleTagsTypeChange: (value: string) => void;
-  handleTagChange: (value: string) => void;
+  selectedTag?: string;
 };
 
 export const TagFilters = ({
   selectedTagsType,
   selectedTag,
-  handleTagsTypeChange,
-  handleTagChange,
 }: TagFiltersProps) => {
+  const navigate = useNavigate({ from: '/projects' });
   const { getAllUniqueTags } = useProjectsTags();
   const tags = getAllUniqueTags(tagTypes, projects);
+
+  const handleTagChange = async (value: string) => {
+    await navigate({
+      search: (prev) => ({
+        ...prev,
+        tag: value,
+      }),
+    });
+  };
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -32,7 +38,6 @@ export const TagFilters = ({
           <TagsTypeButton
             key={value}
             value={value}
-            handleTagsTypeChange={handleTagsTypeChange}
             selectedTagsType={selectedTagsType}
           >
             {label}

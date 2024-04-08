@@ -1,10 +1,10 @@
-import { Outlet, ScrollRestoration } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { Header } from '../components/Header/Header';
 
 export const AppLayout = () => {
   return (
     <>
-      <ScrollRestoration />
+      <ScrollRestoration getKey={(location) => location.pathname} />
       <Header />
       <main>
         <Outlet />

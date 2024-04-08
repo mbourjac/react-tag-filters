@@ -6,7 +6,7 @@ type RadioButtonProps<T extends string> = {
   value: T;
   className?: string;
   isChecked: boolean;
-  handleChange: (value: T) => void;
+  handleChange: (value: T) => Promise<void>;
   children: ReactNode;
 };
 
@@ -26,7 +26,7 @@ export const RadioButton = <T extends string>({
         name={name}
         value={value}
         className="hidden"
-        onChange={() => handleChange(value)}
+        onChange={() => void handleChange(value)}
         checked={isChecked}
       />
       <label

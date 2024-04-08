@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import type { Project } from './ProjectDetails.types';
 
 type ProjectHeroProps = {
@@ -15,8 +15,8 @@ export const ProjectHero = ({ title, tags }: ProjectHeroProps) => {
           {tags.map(({ type, value, label }) => (
             <li key={value}>
               <Link
-                to={`..?type=${type}&tag=${value}`}
-                relative="path"
+                to="/projects"
+                search={{ type, tag: value }}
                 className="rounded-full border border-off-white px-4 py-1 duration-300 ease-in-out [transition-property:all] hover:border-tertiary-light hover:bg-tertiary-light hover:text-body"
               >
                 {label}

@@ -1,21 +1,30 @@
 import type { ReactNode } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { RadioButton } from '../../../components/RadioButton';
 import { cn } from '../../../lib/tailwind';
 
 type TagsTypeButtonProps = {
   value: string;
   selectedTagsType: string;
-  handleTagsTypeChange: (value: string) => void;
   children: ReactNode;
 };
 
 export const TagsTypeButton = ({
   value,
   selectedTagsType,
-  handleTagsTypeChange,
   children,
 }: TagsTypeButtonProps) => {
+  const navigate = useNavigate({ from: '/projects' });
   const isSelected = selectedTagsType === value;
+
+  const handleTagsTypeChange = async (value: string) => {
+    await navigate({
+      search: (prev) => ({
+        ...prev,
+        type: value,
+      }),
+    });
+  };
 
   return (
     <RadioButton<string>
@@ -27,7 +36,7 @@ export const TagsTypeButton = ({
         !isSelected &&
           'opacity-50 hover:opacity-100 [&:not(:hover)]:border-secondary [&:not(:hover)]:bg-secondary',
       )}
-      handleChange={() => handleTagsTypeChange(value)}
+      handleChange={handleTagsTypeChange}
     >
       {children}
     </RadioButton>

@@ -1,39 +1,25 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { getRouteApi } from '@tanstack/react-router';
 import { MainHeading } from '../../components/MainHeading';
 import { projects } from './Projects.constants';
 import { ProjectSearch } from './ProjectsFilters/ProjectSearch';
 import { TagFilters } from './ProjectsFilters/TagFilters';
 import { ProjectsList } from './ProjectsList';
 
+const route = getRouteApi('/projects');
+
 export const Projects = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedTagsType = searchParams.get('type') ?? 'category';
-  const selectedTag = searchParams.get('tag');
+  const searchParams = route.useSearch();
 
   const displayedProjects = useMemo(
     () =>
-      selectedTag ?
+      searchParams.tag ?
         projects.filter(({ tags }) =>
-          tags.find(({ value }) => value === selectedTag),
+          tags.find(({ value }) => value === searchParams.tag),
         )
       : projects,
-    [selectedTag],
+    [searchParams],
   );
-
-  const handleTagsTypeChange = (value: string) => {
-    setSearchParams((searchParams) => {
-      searchParams.set('type', value);
-      return searchParams;
-    });
-  };
-
-  const handleTagChange = (value: string) => {
-    setSearchParams((searchParams) => {
-      searchParams.set('tag', value);
-      return searchParams;
-    });
-  };
 
   return (
     <div className="flex flex-col gap-12 px-4 py-12 sm:px-8">
@@ -49,10 +35,8 @@ export const Projects = () => {
           consectetur alias ipsam repellendus temporibus.
         </p>
         <TagFilters
-          selectedTagsType={selectedTagsType}
-          selectedTag={selectedTag}
-          handleTagsTypeChange={handleTagsTypeChange}
-          handleTagChange={handleTagChange}
+          selectedTagsType={searchParams.type ?? 'category'}
+          selectedTag={searchParams.tag}
         />
       </div>
       <ProjectsList projects={displayedProjects} />
