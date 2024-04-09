@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
+import type { AllRoutes } from '../../lib/tanstack-router';
 
 type HeaderLinkProps = {
-  to: string;
+  to: AllRoutes;
   children: ReactNode;
 };
 
