@@ -10,15 +10,16 @@ const route = getRouteApi('/projects');
 
 export const Projects = () => {
   const searchParams = route.useSearch();
+  const { type: selectedTagsType, tag: seledtedTag } = searchParams;
 
   const displayedProjects = useMemo(
     () =>
-      searchParams.tag ?
+      seledtedTag ?
         projects.filter(({ tags }) =>
-          tags.find(({ value }) => value === searchParams.tag),
+          tags.find(({ value }) => value === seledtedTag),
         )
       : projects,
-    [searchParams],
+    [seledtedTag],
   );
 
   return (
@@ -35,8 +36,8 @@ export const Projects = () => {
           consectetur alias ipsam repellendus temporibus.
         </p>
         <TagFilters
-          selectedTagsType={searchParams.type ?? 'category'}
-          selectedTag={searchParams.tag}
+          selectedTagsType={selectedTagsType ?? 'category'}
+          selectedTag={seledtedTag}
         />
       </div>
       <ProjectsList projects={displayedProjects} />
