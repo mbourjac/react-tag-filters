@@ -14,7 +14,7 @@ export const TagsTypeButton = ({
   selectedTagsType,
   children,
 }: TagsTypeButtonProps) => {
-  const navigate = useNavigate({ from: '/projects' });
+  const navigate = useNavigate();
   const isSelected = selectedTagsType === value;
 
   const handleTagsTypeChange = async (value: string) => {

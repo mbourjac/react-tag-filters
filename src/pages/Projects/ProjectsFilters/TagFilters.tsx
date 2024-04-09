@@ -14,7 +14,7 @@ export const TagFilters = ({
   selectedTagsType,
   selectedTag,
 }: TagFiltersProps) => {
-  const navigate = useNavigate({ from: '/projects' });
+  const navigate = useNavigate();
   const { getAllUniqueTags } = useProjectsTags();
   const tags = getAllUniqueTags(tagTypes, projects);
 
@@ -29,9 +29,7 @@ export const TagFilters = ({
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Link to="." className="button hover:bg-secondary-light">
-        All projects
-      </Link>
+      <Link className="button hover:bg-secondary-light">All projects</Link>
       <fieldset className="flex flex-wrap gap-2">
         <legend className="sr-only">Select the tags type:</legend>
         {tags.map(({ type: { value, label } }) => (
