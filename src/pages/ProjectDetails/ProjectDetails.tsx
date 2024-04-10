@@ -1,7 +1,5 @@
 import { getRouteApi } from '@tanstack/react-router';
 import { useRecommendationProjects } from '../../hooks/use-recommendation-projects';
-import { NotFound } from '../NotFound';
-import { projects } from '../Projects/Projects.constants';
 import { DesktopRecommendationsProjects } from './DesktopRecommendationsProjects';
 import { MobileRecommendationProjects } from './MobileRecommendationProjects';
 import { ProjectDescription } from './ProjectDescription';
@@ -10,15 +8,10 @@ import { ProjectHero } from './ProjectHero';
 const route = getRouteApi('/projects/$projectSlug');
 
 export const ProjectDetails = () => {
-  const { projectSlug } = route.useParams();
-  const project = projects.find((project) => project.slug === projectSlug);
-  const recommendationProjects = useRecommendationProjects(project);
-
-  if (!project) {
-    return <NotFound />;
-  }
-
+  const { project } = route.useLoaderData();
   const { slug, title, tags } = project;
+
+  const recommendationProjects = useRecommendationProjects(project);
 
   return (
     <>
